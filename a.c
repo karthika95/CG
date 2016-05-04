@@ -103,11 +103,16 @@ void drawship()
 	      glVertex2i(440,-30);
 	      glVertex2i(450,-15);
 	      
-	      glVertex2i(303,-120);
+	      glVertex2i(303,-120);////pillar1
 	      glVertex2i(303,-30);
-	      
-	      glVertex2i(318,-120);
+	      glVertex2i(318,-120); 
 	      glVertex2i(318,-30);
+	      
+	      glVertex2i(372,-120); //pillar2
+	      glVertex2i(372,-30);
+	      glVertex2i(357,-120);
+	      glVertex2i(357,-30);
+	      
 	glEnd();
 	
 	glBegin(GL_LINE_STRIP);
@@ -119,6 +124,17 @@ void drawship()
 		glVertex2i(316,-29);
 		glVertex2i(317,-30);
 		glVertex2i(318,-30);
+	glEnd();
+	
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(357,-30);
+		glVertex2i(359,-28);
+		glVertex2i(364,-27);
+		glVertex2i(366,-27);
+		glVertex2i(368,-28);
+		glVertex2i(370,-28);
+		glVertex2i(371,-30);
+		glVertex2i(372,-30);
 	glEnd();
 }
 
