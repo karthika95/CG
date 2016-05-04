@@ -21,7 +21,14 @@ GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
 GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
-
+int n=-450;
+void update(int value)
+{
+	n+=15;
+	glutPostRedisplay();
+	glutTimerFunc(200,update,0);
+	
+}
 void drawship()
 {
 	glBegin(GL_POLYGON);
@@ -95,6 +102,23 @@ void drawship()
 	      glVertex2i(430,-30);
 	      glVertex2i(440,-30);
 	      glVertex2i(450,-15);
+	      
+	      glVertex2i(303,-120);
+	      glVertex2i(303,-30);
+	      
+	      glVertex2i(318,-120);
+	      glVertex2i(318,-30);
+	glEnd();
+	
+	glBegin(GL_LINE_STRIP);
+		glVertex2i(303,-30);
+		glVertex2i(305,-28);
+		glVertex2i(310,-27);
+		glVertex2i(312,-27);
+		glVertex2i(314,-28);
+		glVertex2i(316,-29);
+		glVertex2i(317,-30);
+		glVertex2i(318,-30);
 	glEnd();
 }
 
@@ -182,14 +206,20 @@ void display()
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 	drawsea();
-	drawship(); 	
-	copter();
+	drawship(); 
+	
 	glPushMatrix();
-	glTranslatef(-380,100,0.0);
+		glTranslatef(n,10,0.0);
+		copter();
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(n-300,10,0.0);	
+	//glTranslatef(-380,100,0.0);
 	glScalef(0.65,0.65,0.65);
 	copter();
 	glPopMatrix();
-			
+				
 	char india[]="INDIA";
 	raster[0]=330;
 	raster[1]=-180;
@@ -202,6 +232,7 @@ void display()
 	}
 		
 	glFlush();
+	glutSwapBuffers();
 }
 void init()
 {
@@ -214,10 +245,12 @@ void init()
 void main(int argc, char** argv)
 {
 	glutInit(&argc,argv);
-	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
 	glutInitWindowSize(1300,700);
 	glutCreateWindow("Destroyer");
+	//glutIdleFunc(drawsea);
 	init();
 	glutDisplayFunc(display);
+	glutTimerFunc(100,update,0);
 	glutMainLoop();	
 }
