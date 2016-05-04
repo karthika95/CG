@@ -1,7 +1,8 @@
+
 #include<stdio.h>
 #include<GL/glut.h>
 #include<stdlib.h>
-int raster[2];
+int raster[2],i;
 GLint sea[][2]={{-500,-280},{-500,-205},{500,-205},{500,-280}};
 GLfloat base[][2]={{130.0,-150.0},{180.0,-205.0},{480.0,-205.0},{480.0,-150.0}};
 GLint body1[][2]={{235,-80},{235,-150},{460,-150},{460,-65},{410,-65},{410,-95},{390,-95},{390,-120},{280,-120},{280,-80}};
@@ -13,17 +14,16 @@ GLint sq1[][2]={{250,-100},{265,-100},{265,-115},{250,-115}};
 GLint sq2[][2]={{400,-105},{410,-105},{410,-115},{400,-115}};
 GLint sq3[][2]={{255,-40},{260,-40},{260,-30},{255,-30}};
 GLint sq4[][2]={{250,-70},{265,-70},{265,-60},{250,-60}};
-void display()
-{
-	int i;
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glBegin(GL_POLYGON);
-		glColor3f(0.0,0.5,0.7);
-		for(i=0;i<4;i++)
-		glVertex2iv(sea[i]);
-	glEnd();
+GLint hbody[][2]={{70,230},{90,205},{90,190},{-20,190},{-50,230}};
+GLint hbody1[][2]={{90,205},{63,205},{63,230},{70,230}};
+GLint hbody2[][2]={{63,230},{63,205},{50,205},{50,230}};
+GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
+GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
+GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
+GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
 
+void drawship()
+{
 	glBegin(GL_POLYGON);
 		glColor3f(0.2,0.2,0.2);
 		for(i=0;i<4;i++)
@@ -84,16 +84,11 @@ void display()
 		for(i=0;i<4;i++)
 		glVertex2iv(body5[i]);
 	glEnd();
-
 	
 	glBegin(GL_LINES);
 	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(435,0);
 	      glVertex2i(435,-15);
-	glEnd();
-	      
-	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(415,-15);
 	      glVertex2i(455,-15);
 	      glVertex2i(420,-15);
@@ -101,9 +96,100 @@ void display()
 	      glVertex2i(440,-30);
 	      glVertex2i(450,-15);
 	glEnd();
-	      
-		
+}
 
+void drawsea()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.0,0.5,0.7);
+		for(i=0;i<4;i++)
+		glVertex2iv(sea[i]);
+	glEnd();
+}
+
+void copter()
+{
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<5;i++)
+		glVertex2iv(hbody[i]);
+	glEnd();
+	
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody1[i]);
+	glEnd();
+	
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody2[i]);
+	glEnd();	
+	
+	glBegin(GL_LINES);
+	      glColor3f(0.4,0.4,0.4);
+	      glVertex2i(90,198);
+	      glVertex2i(-26,198);
+	glEnd();
+	
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody3[i]);
+	glEnd();
+	
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody4[i]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody5[i]);
+	glEnd();
+	
+	glBegin(GL_LINE_LOOP);
+		glColor3f(0.4,0.4,0.4);
+		for(i=0;i<4;i++)
+		glVertex2iv(hbody6[i]);
+	glEnd();
+
+	
+	glBegin(GL_LINES);
+	      glColor3f(0.4,0.4,0.4);
+	      glVertex2i(10,270);
+	      glVertex2i(10,275);
+	      glVertex2i(60,275);
+	      glVertex2i(-50,275);
+	glEnd();
+	
+	glBegin(GL_LINES);
+	      glColor3f(0.4,0.4,0.4);
+	      glVertex2i(70,190);
+	      glVertex2i(75,180);
+	      glVertex2i(80,180);
+	      glVertex2i(-15,180);
+	      glVertex2i(-10,190);
+	      glVertex2i(-5,180);
+	glEnd();
+}
+
+void display()
+{
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawsea();
+	drawship(); 	
+	copter();
+	glPushMatrix();
+	glTranslatef(-380,100,0.0);
+	glScalef(0.65,0.65,0.65);
+	copter();
+	glPopMatrix();
+			
 	char india[]="INDIA";
 	raster[0]=330;
 	raster[1]=-180;
@@ -114,7 +200,7 @@ void display()
 		glRasterPos2iv(raster);
 		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
 	}
-
+		
 	glFlush();
 }
 void init()
@@ -133,5 +219,5 @@ void main(int argc, char** argv)
 	glutCreateWindow("Destroyer");
 	init();
 	glutDisplayFunc(display);
-	glutMainLoop();
+	glutMainLoop();	
 }
