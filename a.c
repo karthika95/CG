@@ -196,18 +196,22 @@ void copter()
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody6[i]);
 	glEnd();
-
+	
+	glPushMatrix();
+	glBegin(GL_LINES);
+	      glColor3f(0.4,0.4,0.4);
+	      //glVertex2i(10,270);
+	      //glVertex2i(10,275);
+	      glVertex2i(60,275);
+	      glVertex2i(-50,275);
+	glEnd();
+	
+	glPopMatrix();
 	
 	glBegin(GL_LINES);
 	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(10,270);
 	      glVertex2i(10,275);
-	      glVertex2i(60,275);
-	      glVertex2i(-50,275);
-	glEnd();
-	
-	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(70,190);
 	      glVertex2i(75,180);
 	      glVertex2i(80,180);
@@ -221,20 +225,30 @@ void display()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
+	//glLoadIdentity();
 	drawsea();
+	
+	glPushMatrix();
+		glTranslatef(n-200,-113,0.0);
+		glScalef(-0.45,0.45,-0.45);
+		drawship(); 
+	glPopMatrix();
+	
 	drawship(); 
 	
 	glPushMatrix();
-		glTranslatef(n,10,0.0);
+		glTranslatef(n,70,0.0);
+		glScalef(0.75,0.75,0.75);
 		copter();
 	glPopMatrix();
 	
 	glPushMatrix();
-		glTranslatef(n-300,10,0.0);	
-	//glTranslatef(-380,100,0.0);
-	glScalef(0.65,0.65,0.65);
-	copter();
+		glTranslatef(n-700,70,0.0);	
+		glScalef(0.60,0.60,0.60);
+		copter();
 	glPopMatrix();
+	
+	
 				
 	char india[]="INDIA";
 	raster[0]=330;
