@@ -26,7 +26,7 @@ void update(int value)
 {
 	n+=15;
 	glutPostRedisplay();
-	glutTimerFunc(200,update,0);
+	glutTimerFunc(300,update,0);
 	
 }
 void drawship()
@@ -198,6 +198,7 @@ void copter()
 	glEnd();
 	
 	glPushMatrix();
+	
 	glBegin(GL_LINES);
 	      glColor3f(0.4,0.4,0.4);
 	      //glVertex2i(10,270);
@@ -207,7 +208,7 @@ void copter()
 	glEnd();
 	
 	glPopMatrix();
-	
+
 	glBegin(GL_LINES);
 	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(10,270);
@@ -221,12 +222,44 @@ void copter()
 	glEnd();
 }
 
+void menu(int id)
+{
+	switch(id)
+	{
+		case 1: exit(1);
+			break;
+	}
+	glutPostRedisplay();
+}
+
+void mouse(int btn, int state, int x, int y)
+{
+	if(btn==GLUT_RIGHT_BUTTON && state==GLUT_DOWN)
+	{
+		glutCreateMenu(menu);
+		glutAddMenuEntry("quit",1);
+		glutAttachMenu(GLUT_RIGHT_BUTTON);
+	}
+}
+
+void shooter()
+{
+	glBegin(GL_LINES);
+		glColor3f(0.4,0.4,0.4);
+		glVertex2i(228,-150);
+		glVertex2i(185,-115);
+		glVertex2i(235,-141);
+		glVertex2i(192,-106);
+	glEnd();
+}
 void display()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glLoadIdentity();
 	drawsea();
+	
+	shooter();
 	
 	glPushMatrix();
 		glTranslatef(n-200,-113,0.0);
@@ -264,6 +297,7 @@ void display()
 	glFlush();
 	glutSwapBuffers();
 }
+
 void init()
 {
 	glClearColor(0.0,0.0,0.0,0.0);
@@ -278,7 +312,7 @@ void main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
 	glutInitWindowSize(1300,700);
 	glutCreateWindow("Destroyer");
-	//glutIdleFunc(drawsea);
+	glutMouseFunc(mouse);
 	init();
 	glutDisplayFunc(display);
 	glutTimerFunc(100,update,0);
