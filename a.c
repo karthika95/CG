@@ -1,4 +1,3 @@
-
 #include<stdio.h>
 #include<GL/glut.h>
 #include<stdlib.h>
@@ -21,12 +20,22 @@ GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
 GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
-int n=-450;
+int a1=-450, a2=-1150, b=-650;
+int s1=0, s2=0;
+void display();
 void update(int value)
 {
-	n+=15;
+	a1+=10; //copter 1
+	a2+=10; //copter 2
+	b+=10; //ship 1
+	if(a1>=-130)
+		a1=-130;
+	if(a2>=-130)
+		a2=-130;
+	if(b>=-30)
+		b=-30;
 	glutPostRedisplay();
-	glutTimerFunc(300,update,0);
+	glutTimerFunc(200,update,0);
 	
 }
 void drawship()
@@ -242,6 +251,12 @@ void mouse(int btn, int state, int x, int y)
 	}
 }
 
+void keys(unsigned char key, int x, int y)
+{
+	if(key=='q' || key=='Q')
+		exit(0);
+}
+
 void shooter()
 {
 	glBegin(GL_LINES);
@@ -252,36 +267,48 @@ void shooter()
 		glVertex2i(192,-106);
 	glEnd();
 }
-void display()
+
+void blast()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(1.0,0.4,0.0);
+		glVertex2i(-110,233);
+		glVertex2i(-113,245);
+		glVertex2i(-98,240);
+		glVertex2i(-92,253);
+		glVertex2i(-85,242);
+		glVertex2i(-71,244);
+		glVertex2i(-72,232);
+	glEnd();
+	glBegin(GL_POLYGON);
+		glVertex2i(-72,232);
+		glVertex2i(-61,222);
+		glVertex2i(-73,216);
+		glVertex2i(-66,204);
+		glVertex2i(-83,208);
+		glVertex2i(-92,198);
+		glVertex2i(-99,211);
+		glVertex2i(-110,210);
+		glVertex2i(-108,221);
+		glVertex2i(-118,223);
+		glVertex2i(-110,233);
+	glEnd();
+}
+
+void display1()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
-	//glLoadIdentity();
 	drawsea();
 	
 	shooter();
-	
-	glPushMatrix();
-		glTranslatef(n-200,-113,0.0);
-		glScalef(-0.45,0.45,-0.45);
-		drawship(); 
-	glPopMatrix();
-	
 	drawship(); 
 	
 	glPushMatrix();
-		glTranslatef(n,70,0.0);
+		glTranslatef(a1,70,0.0);
 		glScalef(0.75,0.75,0.75);
 		copter();
 	glPopMatrix();
-	
-	glPushMatrix();
-		glTranslatef(n-700,70,0.0);	
-		glScalef(0.60,0.60,0.60);
-		copter();
-	glPopMatrix();
-	
-	
 				
 	char india[]="INDIA";
 	raster[0]=330;
@@ -295,9 +322,144 @@ void display()
 	}
 		
 	glFlush();
-	glutSwapBuffers();
 }
 
+void display2()
+{
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawsea();
+	
+	shooter();
+	
+	glPushMatrix();
+		glTranslatef(b,-113,0.0);
+		glScalef(-0.45,0.45,-0.45);
+		drawship(); 
+	glPopMatrix();
+	
+	drawship(); 
+	
+	glPushMatrix();
+		glTranslatef(a1,70,0.0);
+		glScalef(0.75,0.75,0.75);
+		copter();
+	glPopMatrix();
+	
+	blast();	
+				
+	char india[]="INDIA";
+	raster[0]=330;
+	raster[1]=-180;
+	for(i=4;i>=0;i--)
+	{
+		raster[0]=raster[0]-8;
+		glColor3f(1.0,1.0,1.0);
+		glRasterPos2iv(raster);
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
+	}
+}
+
+void display3()
+{
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawsea();
+	
+	shooter();
+	
+	drawship(); 
+	
+	glPushMatrix();
+		glTranslatef(b,-113,0.0);
+		glScalef(-0.45,0.45,-0.45);
+		drawship(); 
+	glPopMatrix();	
+	
+	if(b>=-30)
+	{
+		glPushMatrix();
+		glTranslatef(-40.0,-470,0.0);
+		glScalef(1.4,1.4,1.4);
+		blast();
+		glPopMatrix();
+	}
+	
+				
+	char india[]="INDIA";
+	raster[0]=330;
+	raster[1]=-180;
+	for(i=4;i>=0;i--)
+	{
+		raster[0]=raster[0]-8;
+		glColor3f(1.0,1.0,1.0);
+		glRasterPos2iv(raster);
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
+	}
+	
+}
+void display4()
+{
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawsea();
+	
+	shooter();
+	
+	drawship(); 
+	
+	glPushMatrix();
+		glTranslatef(a2,70,0.0);	
+		glScalef(0.60,0.60,0.60);
+		copter();
+	glPopMatrix();
+	
+	if(a2>=-130)
+	{
+	glPushMatrix();
+		glTranslatef(-20.0,-30,0.0);
+		blast();
+	glPopMatrix();
+	}
+				
+	char india[]="INDIA";
+	raster[0]=330;
+	raster[1]=-180;
+	for(i=4;i>=0;i--)
+	{
+		raster[0]=raster[0]-8;
+		glColor3f(1.0,1.0,1.0);
+		glRasterPos2iv(raster);
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
+	}
+	//display();
+}
+
+
+void display()
+{
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	display1();
+	if(a1>=-130)
+	{
+		s1++;
+		display2();
+	}
+	
+	if(s1>2)
+	{	s2++;
+		display3();
+	}
+	
+	/*if(s2>2)
+	{
+		display4();
+	}*/
+			
+	glFlush();
+	glutSwapBuffers();
+}
 void init()
 {
 	glClearColor(0.0,0.0,0.0,0.0);
@@ -313,6 +475,7 @@ void main(int argc, char** argv)
 	glutInitWindowSize(1300,700);
 	glutCreateWindow("Destroyer");
 	glutMouseFunc(mouse);
+	glutKeyboardFunc(keys);
 	init();
 	glutDisplayFunc(display);
 	glutTimerFunc(100,update,0);
