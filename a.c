@@ -21,7 +21,8 @@ GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
 int a1=-450, a2=-1150, b=-650;
-int s1=0, s2=0;
+int s1=0, s2=0,s3=0;
+GLfloat theta=0.0;
 void display();
 void update(int value)
 {
@@ -38,6 +39,15 @@ void update(int value)
 	glutTimerFunc(200,update,0);
 	
 }
+void stars()
+{
+	glBegin(GL_POINTS);
+		glPointSize(5.0);
+		glColor3f(0.0,0.0,0.0);
+		glVertex2i(370,400);
+	glEnd();
+}
+
 void drawship()
 {
 	glBegin(GL_POLYGON);
@@ -294,14 +304,35 @@ void blast()
 		glVertex2i(-110,233);
 	glEnd();
 }
+void rotate1()
+{
+	theta-=2.0;
+	if(theta<=-10.0)
+		theta=-10.0;
+}
+
+void rotate2()
+{
+	theta+=1.0;
+	if(theta>=40.0)
+		theta=40.0;
+}
 
 void display1()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
-	drawsea();
 	
+	rotate1();
+	glPushMatrix();
+	glTranslatef(230,-150,0);
+	glRotatef(theta,0,0,1);
+	glTranslatef(-230,150,0);
 	shooter();
+	glPopMatrix();
+	
+	drawsea();
+	stars();
 	drawship(); 
 	
 	glPushMatrix();
@@ -328,17 +359,24 @@ void display2()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
-	drawsea();
 	
+	rotate2();
+	glPushMatrix();
+	glTranslatef(230,-150,0);
+	glRotatef(theta,0,0,1);
+	glTranslatef(-230,150,0);
 	shooter();
+	glPopMatrix();
 	
+	drawsea();
+	drawship(); 
+	stars();
+
 	glPushMatrix();
 		glTranslatef(b,-113,0.0);
 		glScalef(-0.45,0.45,-0.45);
 		drawship(); 
 	glPopMatrix();
-	
-	drawship(); 
 	
 	glPushMatrix();
 		glTranslatef(a1,70,0.0);
@@ -364,11 +402,10 @@ void display3()
 {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
+	
 	drawsea();
-	
-	shooter();
-	
 	drawship(); 
+	stars();
 	
 	glPushMatrix();
 		glTranslatef(b,-113,0.0);
@@ -405,7 +442,7 @@ void display4()
 	drawsea();
 	
 	shooter();
-	
+	stars();
 	drawship(); 
 	
 	glPushMatrix();
@@ -432,7 +469,6 @@ void display4()
 		glRasterPos2iv(raster);
 		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
 	}
-	//display();
 }
 
 
@@ -447,15 +483,21 @@ void display()
 		display2();
 	}
 	
-	if(s1>2)
+	if(s1>5)
 	{	s2++;
 		display3();
 	}
 	
-	/*if(s2>2)
+	if(s2>30)
 	{
+		s3++;
 		display4();
-	}*/
+	}
+	if(s3>40)
+	{
+		s1=0; s2=0; s3=0;a1=-450; a2=-1150; b=-650;
+		display();
+	}
 			
 	glFlush();
 	glutSwapBuffers();
@@ -481,3 +523,4 @@ void main(int argc, char** argv)
 	glutTimerFunc(100,update,0);
 	glutMainLoop();	
 }
+
