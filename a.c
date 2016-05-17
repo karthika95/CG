@@ -2,7 +2,7 @@
 #include<GL/glut.h>
 #include<stdlib.h>
 int raster[2],i;
-GLint sea[][2]={{-500,-280},{-500,-205},{500,-205},{500,-280}};
+GLint sea[][2]={{-500,-300},{-500,-205},{500,-205},{500,-300}};
 GLfloat base[][2]={{130.0,-150.0},{180.0,-205.0},{480.0,-205.0},{480.0,-150.0}};
 GLint body1[][2]={{235,-80},{235,-150},{460,-150},{460,-65},{410,-65},{410,-95},{390,-95},{390,-120},{280,-120},{280,-80}};
 GLint body2[][2]={{240,-80},{275,-80},{275,-50},{240,-50}};
@@ -20,15 +20,19 @@ GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
 GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
-int a1=-450, a2=-1150, b=-650;
-int s1=0, s2=0,s3=0;
-GLfloat theta=0.0;
+int a1=-450, a2=-1150, b=-650, b2=-1500,flag=0;
+int s1=0, s2=0,s3=0,s4=0;
+GLint bx1=0,by1=0,bx2=0,by2=0,f=0,f1=0;
+GLfloat bx3=0.0,by3=0.0,bx4=0.0,by4=0.0,theta=0.0;
 void display();
+void fan();
+void drawflag();
 void update(int value)
 {
 	a1+=10; //copter 1
 	a2+=10; //copter 2
 	b+=10; //ship 1
+	b2+=15;
 	if(a1>=-130)
 		a1=-130;
 	if(a2>=-130)
@@ -36,22 +40,14 @@ void update(int value)
 	if(b>=-30)
 		b=-30;
 	glutPostRedisplay();
-	glutTimerFunc(200,update,0);
+	glutTimerFunc(100,update,0);
 	
-}
-void stars()
-{
-	glBegin(GL_POINTS);
-		glPointSize(5.0);
-		glColor3f(0.0,0.0,0.0);
-		glVertex2i(370,400);
-	glEnd();
 }
 
 void drawship()
 {
 	glBegin(GL_POLYGON);
-		glColor3f(0.2,0.2,0.2);
+		glColor3f(0.1,0.1,0.1);
 		for(i=0;i<4;i++)
 		glVertex2fv(base[i]);
 	glEnd();
@@ -63,25 +59,25 @@ void drawship()
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.2,0.2,0.2);
+		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq1[i]);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.2,0.2,0.2);
+		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq2[i]);
 	glEnd();
 	
 	glBegin(GL_POLYGON);
-		glColor3f(0.2,0.2,0.2);
+		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq3[i]);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.2,0.2,0.2);
+		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq4[i]);
 	glEnd();
@@ -112,7 +108,7 @@ void drawship()
 	glEnd();
 	
 	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
+	      glColor3f(0.8,0.3,0.3);
 	      glVertex2i(435,0);
 	      glVertex2i(435,-15);
 	      glVertex2i(415,-15);
@@ -155,6 +151,48 @@ void drawship()
 		glVertex2i(371,-30);
 		glVertex2i(372,-30);
 	glEnd();
+	
+	if(flag==1)
+	{
+		glPushMatrix();
+		glTranslatef(b2+100,-113,0);
+		drawflag();
+		glPopMatrix();
+	}
+}
+
+void drawflag()
+{
+	glBegin(GL_POLYGON);
+		glColor3f(0.8,0.4,0.0);
+		glVertex2f(-40,-100);
+		glVertex2f(-70,-100);
+		glVertex2f(-70,-90);
+		glVertex2f(-40,-90);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glPointSize(3.0);
+		glColor3f(0.0,0.0,1.0);
+		glVertex2f(-55,-105);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glColor3f(1.0,1.0,1.0);
+		glVertex2f(-40,-100);
+		glVertex2f(-70,-100);
+		glVertex2f(-70,-110);
+		glVertex2f(-40,-110);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glColor3f(0.0,1.0,0.0);
+		glVertex2f(-70,-110);
+		glVertex2f(-40,-110);
+		glVertex2f(-40,-120);
+		glVertex2f(-70,-120);
+	glEnd();
+	
 }
 
 void drawsea()
@@ -166,70 +204,68 @@ void drawsea()
 	glEnd();
 }
 
+void stars()
+{
+	glPointSize(5.0);
+	glBegin(GL_POINTS);
+		glColor3f(1.0,1.0,1.0);
+		glVertex2i(370,200);
+		glVertex2i(-450,205);
+		glVertex2i(300,220);
+		glVertex2i(-300,220);
+		glVertex2i(250,220);
+	glEnd();
+}
+
 void copter()
 {
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<5;i++)
 		glVertex2iv(hbody[i]);
 	glEnd();
 	
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody1[i]);
 	glEnd();
 	
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody2[i]);
 	glEnd();	
 	
 	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(90,198);
 	      glVertex2i(-26,198);
 	glEnd();
 	
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody3[i]);
 	glEnd();
 	
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody4[i]);
 	glEnd();
 
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody5[i]);
 	glEnd();
 	
 	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
 		for(i=0;i<4;i++)
 		glVertex2iv(hbody6[i]);
 	glEnd();
 	
 	glPushMatrix();
 	
-	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
-	      //glVertex2i(10,270);
-	      //glVertex2i(10,275);
-	      glVertex2i(60,275);
-	      glVertex2i(-50,275);
-	glEnd();
+	fan();
 	
 	glPopMatrix();
 
 	glBegin(GL_LINES);
-	      glColor3f(0.4,0.4,0.4);
 	      glVertex2i(10,270);
 	      glVertex2i(10,275);
 	      glVertex2i(70,190);
@@ -240,7 +276,27 @@ void copter()
 	      glVertex2i(-5,180);
 	glEnd();
 }
-
+void fan()
+{
+	if(f<60)
+	{
+		f+=3;
+		glBegin(GL_LINES);
+	     		glVertex2i(60-f,275);
+	     		glVertex2i(-50+f,275);
+		
+		glEnd();
+	}
+	if(f>=60&& f1!=60)
+	{
+		f1+=2;
+		glBegin(GL_LINES);
+			glVertex2i(19+f1,275);
+	     		glVertex2i(-1-f1,275);
+		glEnd();
+		f=0;f1=0;
+	}
+}
 void menu(int id)
 {
 	switch(id)
@@ -269,12 +325,13 @@ void keys(unsigned char key, int x, int y)
 
 void shooter()
 {
+
 	glBegin(GL_LINES);
-		glColor3f(0.4,0.4,0.4);
+		glColor3f(0.2,0.2,0.2);
 		glVertex2i(228,-150);
-		glVertex2i(185,-115);
-		glVertex2i(235,-141);
-		glVertex2i(192,-106);
+		glVertex2i(189,-122);
+		glVertex2i(244,-150);
+		glVertex2i(195,-116);
 	glEnd();
 }
 
@@ -313,29 +370,53 @@ void rotate1()
 
 void rotate2()
 {
-	theta+=1.0;
+	theta+=20.0;
 	if(theta>=40.0)
 		theta=40.0;
+}
+void rotate3()
+{
+	theta-=9.0;
+	if(theta>=0.0)
+		theta=0.0;
+}
+void bullet(void)
+{
+	glBegin(GL_POLYGON);
+	glColor3f(0.7,0.7,0.7);
+		glVertex2i(210,-130);
+		glVertex2i(215,-135);
+		glVertex2i(215,-130);
+		glVertex2i(210,-135);
+	glEnd();
 }
 
 void display1()
 {
 	int i;
+	flag=0;
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+	stars();
+
 	rotate1();
 	glPushMatrix();
-	glTranslatef(230,-150,0);
-	glRotatef(theta,0,0,1);
-	glTranslatef(-230,150,0);
-	shooter();
+		glTranslatef(230,-150,0);
+		glRotatef(theta,0,0,1);
+		glTranslatef(-230,150,0);
+		shooter();
+	glPopMatrix();
+	
+	bx1+=8;by1+=10;
+	glPushMatrix();
+		glTranslatef(-bx1,by1,0);
+		bullet();
 	glPopMatrix();
 	
 	drawsea();
-	stars();
 	drawship(); 
 	
 	glPushMatrix();
+		glColor3f(0.5,0.7,1.0);
 		glTranslatef(a1,70,0.0);
 		glScalef(0.75,0.75,0.75);
 		copter();
@@ -360,18 +441,12 @@ void display2()
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	rotate2();
-	glPushMatrix();
-	glTranslatef(230,-150,0);
-	glRotatef(theta,0,0,1);
-	glTranslatef(-230,150,0);
 	shooter();
-	glPopMatrix();
-	
+		
 	drawsea();
 	drawship(); 
 	stars();
-
+	
 	glPushMatrix();
 		glTranslatef(b,-113,0.0);
 		glScalef(-0.45,0.45,-0.45);
@@ -379,6 +454,7 @@ void display2()
 	glPopMatrix();
 	
 	glPushMatrix();
+		glColor3f(0.2,0.2,0.2);
 		glTranslatef(a1,70,0.0);
 		glScalef(0.75,0.75,0.75);
 		copter();
@@ -403,6 +479,23 @@ void display3()
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 	
+	rotate2();
+	glPushMatrix();
+		glTranslatef(230,-150,0);
+		glRotatef(theta,0,0,1);
+		glTranslatef(-230,150,0);
+		shooter();
+	glPopMatrix();
+	
+	if(s2>7 && s2<22)
+	{
+	bx2+=22;by2+=2;
+	glPushMatrix();
+	glTranslatef(-bx2,-by2,0);
+	bullet();
+	glPopMatrix();
+	}
+		
 	drawsea();
 	drawship(); 
 	stars();
@@ -421,7 +514,6 @@ void display3()
 		blast();
 		glPopMatrix();
 	}
-	
 				
 	char india[]="INDIA";
 	raster[0]=330;
@@ -441,15 +533,32 @@ void display4()
 	glClear(GL_COLOR_BUFFER_BIT);
 	drawsea();
 	
-	shooter();
 	stars();
 	drawship(); 
 	
+	rotate3();
 	glPushMatrix();
+	glTranslatef(230,-150,0);
+	glRotatef(theta,0,0,1);
+	glTranslatef(-230,150,0);
+	shooter();
+	glPopMatrix();
+	
+	glPushMatrix();
+		glColor3f(0.9,0.5,0.3);
 		glTranslatef(a2,70,0.0);	
 		glScalef(0.60,0.60,0.60);
 		copter();
 	glPopMatrix();
+	
+	if(s3<35)
+	{
+	bx3+=10;by3+=10;
+	glPushMatrix();
+	glTranslatef(-bx3,by3,0);
+	bullet();
+	glPopMatrix();
+	}
 	
 	if(a2>=-130)
 	{
@@ -458,7 +567,16 @@ void display4()
 		blast();
 	glPopMatrix();
 	}
-				
+	
+	glPushMatrix();
+		glTranslatef(b2,-113,0.0);
+		glScalef(-0.45,0.45,-0.45);
+		glColor3f(0.2,0.2,0.2);
+		drawship(); 
+		flag=1;
+	glPopMatrix();	
+	
+	flag=0;			
 	char india[]="INDIA";
 	raster[0]=330;
 	raster[1]=-180;
@@ -471,34 +589,86 @@ void display4()
 	}
 }
 
+void display5()
+{
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+	drawsea();
+	
+	stars();
+	
+	rotate2();
+	glPushMatrix();
+		glTranslatef(230,-150,0);
+		glRotatef(theta,0,0,1);
+		glTranslatef(-230,150,0);
+		shooter();
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(b2,-113,0.0);
+		glScalef(-0.45,0.45,-0.45);
+		flag=1;
+		drawship(); 
+	glPopMatrix();	
+	flag=0;
+	drawship(); 
+	
+	char india[]="INDIA";
+	raster[0]=330;
+	raster[1]=-180;
+	for(i=4;i>=0;i--)
+	{
+		raster[0]=raster[0]-8;
+		glColor3f(1.0,1.0,1.0);
+		glRasterPos2iv(raster);
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13,india[i]);
+	}
+}
 
 void display()
 {
 
 	glClear(GL_COLOR_BUFFER_BIT);
+	
+	stars();
 	display1();
 	if(a1>=-130)
 	{
 		s1++;
+		if(s1>6)
+		bx1=0; by1=0;
 		display2();
 	}
 	
-	if(s1>5)
-	{	s2++;
+	if(s1>7)
+	{
+		s2++;
 		display3();
 	}
 	
 	if(s2>30)
 	{
+		bx2=0;by2=0;
 		s3++;
 		display4();
 	}
+	
 	if(s3>40)
 	{
-		s1=0; s2=0; s3=0;a1=-450; a2=-1150; b=-650;
+		bx3=0;by3=0;
+		s4++;
+		display5();
+	}
+		
+	if(s4>30)
+	{
+		bx3=0;by3=0;
+		s1=0; s2=0; s3=0; s4=0; a1=-450; a2=-1150; b=-650; b2=-1500;
+		theta=0.0;
 		display();
 	}
-			
+	
 	glFlush();
 	glutSwapBuffers();
 }
@@ -523,4 +693,3 @@ void main(int argc, char** argv)
 	glutTimerFunc(100,update,0);
 	glutMainLoop();	
 }
-
