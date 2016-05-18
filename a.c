@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<GL/glut.h>
 #include<stdlib.h>
+#include<string.h>
 int raster[2],i;
 GLint sea[][2]={{-500,-300},{-500,-205},{500,-205},{500,-300}};
 GLfloat base[][2]={{130.0,-150.0},{180.0,-205.0},{480.0,-205.0},{480.0,-150.0}};
@@ -20,13 +21,14 @@ GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
 GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
-int a1=-450, a2=-1150, b=-650, b2=-1500,flag=0;
-int s1=0, s2=0,s3=0,s4=0;
+GLint a1, a2, b, b2,flag=0,v=0;
+GLint s1,s2,s3,s4;
 GLint bx1=0,by1=0,bx2=0,by2=0,f=0,f1=0;
 GLfloat bx3=0.0,by3=0.0,bx4=0.0,by4=0.0,theta=0.0;
 void display();
 void fan();
 void drawflag();
+void init();
 void update(int value)
 {
 	a1+=10; //copter 1
@@ -152,45 +154,47 @@ void drawship()
 		glVertex2i(372,-30);
 	glEnd();
 	
-	if(flag==1)
-	{
-		glPushMatrix();
-		glTranslatef(b2+100,-113,0);
-		drawflag();
-		glPopMatrix();
-	}
+}
+
+void ship()
+{
+	drawship();
+	drawflag();
 }
 
 void drawflag()
 {
 	glBegin(GL_POLYGON);
 		glColor3f(0.8,0.4,0.0);
-		glVertex2f(-40,-100);
-		glVertex2f(-70,-100);
-		glVertex2f(-70,-90);
-		glVertex2f(-40,-90);
+		glVertex2f(300,-170);
+		glVertex2f(360,-170);
+		glVertex2f(360,-160);
+		glVertex2f(300,-160);
 	glEnd();
 	
-	glBegin(GL_POLYGON);
-		glPointSize(3.0);
-		glColor3f(0.0,0.0,1.0);
-		glVertex2f(-55,-105);
-	glEnd();
+	
 	
 	glBegin(GL_POLYGON);
 		glColor3f(1.0,1.0,1.0);
-		glVertex2f(-40,-100);
-		glVertex2f(-70,-100);
-		glVertex2f(-70,-110);
-		glVertex2f(-40,-110);
+		glVertex2f(300,-170);
+		glVertex2f(360,-170);
+		glVertex2f(360,-180);
+		glVertex2f(300,-180);
 	glEnd();
 	
+	glPointSize(2.5);
+	glBegin(GL_POINTS);
+		
+		glColor3f(0.0,0.0,1.0);
+		glVertex2f(330,-175);
+	glEnd();
+
 	glBegin(GL_POLYGON);
 		glColor3f(0.0,1.0,0.0);
-		glVertex2f(-70,-110);
-		glVertex2f(-40,-110);
-		glVertex2f(-40,-120);
-		glVertex2f(-70,-120);
+		glVertex2f(360,-180);
+		glVertex2f(300,-180);
+		glVertex2f(300,-190);
+		glVertex2f(360,-190);
 	glEnd();
 	
 }
@@ -321,11 +325,18 @@ void keys(unsigned char key, int x, int y)
 {
 	if(key=='q' || key=='Q')
 		exit(0);
+	if(key=='v' || key=='V')
+	{
+		v=1;s1=0; s2=0; s3=0; s4=0; a1=-450; a2=-1150; b=-650; b2=-1700;
+		init();
+		glutTimerFunc(300,update,0);
+		display();
+	}
 }
 
 void shooter()
 {
-
+	glLineWidth(2.8);
 	glBegin(GL_LINES);
 		glColor3f(0.2,0.2,0.2);
 		glVertex2i(228,-150);
@@ -333,6 +344,7 @@ void shooter()
 		glVertex2i(244,-150);
 		glVertex2i(195,-116);
 	glEnd();
+	glLineWidth(2.0);
 }
 
 void blast()
@@ -560,6 +572,17 @@ void display4()
 	glPopMatrix();
 	}
 	
+	if(s3>36)
+	{
+		
+	glPushMatrix();
+		glColor3f(0.2,0.2,0.2);
+		glTranslatef(a2,70,0.0);	
+		glScalef(0.60,0.60,0.60);
+		copter();
+	glPopMatrix();
+	}
+	
 	if(a2>=-130)
 	{
 	glPushMatrix();
@@ -572,7 +595,7 @@ void display4()
 		glTranslatef(b2,-113,0.0);
 		glScalef(-0.45,0.45,-0.45);
 		glColor3f(0.2,0.2,0.2);
-		drawship(); 
+		ship(); 
 		flag=1;
 	glPopMatrix();	
 	
@@ -609,7 +632,7 @@ void display5()
 		glTranslatef(b2,-113,0.0);
 		glScalef(-0.45,0.45,-0.45);
 		flag=1;
-		drawship(); 
+		ship(); 
 	glPopMatrix();	
 	flag=0;
 	drawship(); 
@@ -626,11 +649,50 @@ void display5()
 	}
 }
 
+void screen1(int x, int y, char *string, int font)
+{
+    	int len,i;
+	glColor3f(0.8,0.52,1.0);
+	glRasterPos2f(x, y);
+   	len=(int) strlen(string);
+    	for(i = 0; i < len; i++) 
+    	{
+   		if(font==1)
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+		if(font==2)
+   	 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,string[i]);
+		if(font==3)
+	      		  glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12,string[i]);
+		if(font==4)
+    			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,string[i]);
+	}
+
+}
+
+void display0(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.5,0.2,0.0,0.0);
+	
+	screen1(-150,90,"Press 'v' to view simulation",1);
+	screen1(-185,-10,"Press 'q' or double click on the screen to quit ",2);
+	glFlush();
+	glutSwapBuffers();
+
+}
+
 void display()
 {
 
+	glClearColor(0.0,0.0,0.0,0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+	if(v==0)
+	{
+		init();
+		display0();
+	}
+	else
+	{v=1;
 	stars();
 	display1();
 	if(a1>=-130)
@@ -656,25 +718,26 @@ void display()
 	
 	if(s3>40)
 	{
-		bx3=0;by3=0;
 		s4++;
 		display5();
+		 a1=-450;
 	}
 		
-	if(s4>30)
+	if(s4>40)
 	{
 		bx3=0;by3=0;
-		s1=0; s2=0; s3=0; s4=0; a1=-450; a2=-1150; b=-650; b2=-1500;
+		bx1=0;by1=0;
+		s1=0; s2=0; s3=0; s4=0; a2=-1150; b=-650; b2=-1700;
 		theta=0.0;
 		display();
 	}
-	
+	}
 	glFlush();
 	glutSwapBuffers();
 }
 void init()
 {
-	glClearColor(0.0,0.0,0.0,0.0);
+	glClearColor(0.5,0.2,0.0,0.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(-500.0,500.0,-300.0,300.0);
@@ -690,6 +753,7 @@ void main(int argc, char** argv)
 	glutKeyboardFunc(keys);
 	init();
 	glutDisplayFunc(display);
-	glutTimerFunc(100,update,0);
+	//glutTimerFunc(100,update,0);
 	glutMainLoop();	
 }
+
