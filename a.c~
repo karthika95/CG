@@ -336,7 +336,7 @@ void keys(unsigned char key, int x, int y)
 
 void shooter()
 {
-	glLineWidth(2.5);
+	glLineWidth(2.8);
 	glBegin(GL_LINES);
 		glColor3f(0.2,0.2,0.2);
 		glVertex2i(228,-150);
@@ -344,7 +344,7 @@ void shooter()
 		glVertex2i(244,-150);
 		glVertex2i(195,-116);
 	glEnd();
-	glLineWidth(1.5);
+	glLineWidth(2.0);
 }
 
 void blast()
@@ -674,8 +674,8 @@ void display0(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0.5,0.2,0.0,0.0);
 	
-	screen1(-150,100,"Press 'v' to view simulation",1);
-	screen1(-185,0,"Press 'q' or double click on the screen to quit ",2);
+	screen1(-150,90,"Press 'v' to view simulation",1);
+	screen1(-185,-10,"Press 'q' or double click on the screen to quit ",2);
 	glFlush();
 	glutSwapBuffers();
 
