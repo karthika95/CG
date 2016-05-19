@@ -5,7 +5,10 @@
 int raster[2],i;
 GLint sea[][2]={{-500,-300},{-500,-205},{500,-205},{500,-300}};
 GLfloat base[][2]={{130.0,-150.0},{180.0,-205.0},{480.0,-205.0},{480.0,-150.0}};
-GLint body1[][2]={{235,-80},{235,-150},{460,-150},{460,-65},{410,-65},{410,-95},{390,-95},{390,-120},{280,-120},{280,-80}};
+GLint body1a[][2]={{235,-80},{235,-150},{280,-150},{280,-80}};
+GLint body1b[][2]={{280,-150},{460,-150},{460,-120},{280,-120}};
+GLint body1c[][2]={{390,-120},{460,-120},{460,-95},{390,-95}};
+GLint body1d[][2]={{410,-95},{460,-95},{460,-65},{410,-65}};
 GLint body2[][2]={{240,-80},{275,-80},{275,-50},{240,-50}};
 GLint body3[][2]={{445,-65},{445,-30},{425,-30},{425,-65}};
 GLint body4[][2]={{440,-30},{440,-15},{430,-15},{430,-30}};
@@ -21,7 +24,7 @@ GLint hbody3[][2]={{20,230},{0,230},{4,270},{16,270}};
 GLint hbody4[][2]={{-46,225},{-42,218},{-150,218},{-150,225}};
 GLint hbody5[][2]={{-150,225},{-155,240},{-147,240},{-140,225}};
 GLint hbody6[][2]={{-150,218},{-155,203},{-147,203},{-140,218}};
-GLint a1, a2, b, b2,flag=0,v=0;
+GLint a1, a2, b, b2,flag=0,v=0,stop=0;
 GLint s1,s2,s3,s4;
 GLint bx1=0,by1=0,bx2=0,by2=0,f=0,f1=0;
 GLfloat bx3=0.0,by3=0.0,bx4=0.0,by4=0.0,theta=0.0;
@@ -31,10 +34,13 @@ void drawflag();
 void init();
 void update(int value)
 {
+	if(stop==0)
+	{
 	a1+=10; //copter 1
 	a2+=10; //copter 2
 	b+=10; //ship 1
 	b2+=15;
+	}
 	if(a1>=-130)
 		a1=-130;
 	if(a2>=-130)
@@ -46,6 +52,7 @@ void update(int value)
 	
 }
 
+//destroyer
 void drawship()
 {
 	glBegin(GL_POLYGON);
@@ -54,59 +61,70 @@ void drawship()
 		glVertex2fv(base[i]);
 	glEnd();
 	
-	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
-		for(i=0;i<10;i++)
-		glVertex2iv(body1[i]);
+	glBegin(GL_POLYGON);
+		glColor3f(0.25,0.25,0.25);
+		for(i=0;i<4;i++)
+		glVertex2iv(body1a[i]);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		for(i=0;i<4;i++)
+		glVertex2iv(body1b[i]);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		for(i=0;i<4;i++)
+		glVertex2iv(body1c[i]);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.5,0.5,0.5);
+		for(i=0;i<4;i++)
+		glVertex2iv(body1d[i]);
+	glEnd();
+
+	
+	glBegin(GL_POLYGON);
+		glColor3f(0.25,0.25,0.25);
+		for(i=0;i<4;i++)
+		glVertex2iv(body2[i]);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+		glColor3f(0.3,0.3,0.3);
+		for(i=0;i<4;i++)
+		glVertex2iv(body3[i]);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glColor3f(0.35,0.35,0.35);
+		for(i=0;i<4;i++)
+		glVertex2iv(body4[i]);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		for(i=0;i<4;i++)
+		glVertex2iv(body5[i]);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glColor3f(0.7,0.7,0.7);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq1[i]);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq2[i]);
 	glEnd();
 	
 	glBegin(GL_POLYGON);
-		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq3[i]);
 	glEnd();
 
 	glBegin(GL_POLYGON);
-		glColor3f(0.5,0.5,0.5);
 		for(i=0;i<4;i++)
 		glVertex2iv(sq4[i]);
-	glEnd();
-
-	
-	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
-		for(i=0;i<4;i++)
-		glVertex2iv(body2[i]);
-	glEnd();
-
-	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
-		for(i=0;i<4;i++)
-		glVertex2iv(body3[i]);
-	glEnd();
-	
-	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
-		for(i=0;i<4;i++)
-		glVertex2iv(body4[i]);
-	glEnd();
-	
-	glBegin(GL_LINE_LOOP);
-		glColor3f(0.4,0.4,0.4);
-		for(i=0;i<4;i++)
-		glVertex2iv(body5[i]);
 	glEnd();
 	
 	glBegin(GL_LINES);
@@ -156,12 +174,14 @@ void drawship()
 	
 }
 
+//Indian ship
 void ship()
 {
 	drawship();
 	drawflag();
 }
 
+//Indian flag
 void drawflag()
 {
 	glBegin(GL_POLYGON);
@@ -199,6 +219,7 @@ void drawflag()
 	
 }
 
+//sea
 void drawsea()
 {
 	glBegin(GL_POLYGON);
@@ -208,19 +229,32 @@ void drawsea()
 	glEnd();
 }
 
+//stars
 void stars()
 {
-	glPointSize(5.0);
+	glPointSize(2.0);
 	glBegin(GL_POINTS);
 		glColor3f(1.0,1.0,1.0);
 		glVertex2i(370,200);
 		glVertex2i(-450,205);
 		glVertex2i(300,220);
+		glVertex2i(-380,250);
 		glVertex2i(-300,220);
-		glVertex2i(250,220);
+		glVertex2i(-320,250);
+		glVertex2i(-100,260);
+		glVertex2i(-20,270);
+		glVertex2i(-190,270);
+		glVertex2i(200,280);
+		glVertex2i(50,260);
+		glVertex2i(180,270);
+		glVertex2i(300,280);
+		glVertex2i(450,220);
+		glVertex2i(400,275);
+		glVertex2i(350,250);
 	glEnd();
 }
 
+//helicopters
 void copter()
 {
 	glBegin(GL_LINE_LOOP);
@@ -280,6 +314,8 @@ void copter()
 	      glVertex2i(-5,180);
 	glEnd();
 }
+
+//helicopter fan
 void fan()
 {
 	if(f<60)
@@ -301,6 +337,7 @@ void fan()
 		f=0;f1=0;
 	}
 }
+
 void menu(int id)
 {
 	switch(id)
@@ -319,24 +356,29 @@ void mouse(int btn, int state, int x, int y)
 		glutAddMenuEntry("quit",1);
 		glutAttachMenu(GLUT_RIGHT_BUTTON);
 	}
+	if(btn==GLUT_LEFT_BUTTON && state==GLUT_DOWN) //to stop movement
+		stop=1;
 }
 
 void keys(unsigned char key, int x, int y)
 {
-	if(key=='q' || key=='Q')
+	if(key=='q' || key=='Q')				//to quit
 		exit(0);
-	if(key=='v' || key=='V')
+	if(key=='v' || key=='V')                         	//to enter simulation
 	{
 		v=1;s1=0; s2=0; s3=0; s4=0; a1=-450; a2=-1150; b=-650; b2=-1700;
 		init();
 		glutTimerFunc(300,update,0);
 		display();
 	}
+	if(key=='s' || key== 'S')				//to start movement
+		stop=0;
 }
 
+//destroyer's shooting weapon
 void shooter()
 {
-	glLineWidth(2.5);
+
 	glBegin(GL_LINES);
 		glColor3f(0.2,0.2,0.2);
 		glVertex2i(228,-150);
@@ -344,8 +386,8 @@ void shooter()
 		glVertex2i(244,-150);
 		glVertex2i(195,-116);
 	glEnd();
-	glLineWidth(1.5);
 }
+
 
 void blast()
 {
@@ -373,6 +415,8 @@ void blast()
 		glVertex2i(-110,233);
 	glEnd();
 }
+
+//to rotate shooter clockwise(to shoot 1st copter)
 void rotate1()
 {
 	theta-=2.0;
@@ -380,18 +424,22 @@ void rotate1()
 		theta=-10.0;
 }
 
+//to rotate shooter anticlockwise(to shoot ship)
 void rotate2()
 {
 	theta+=20.0;
 	if(theta>=40.0)
 		theta=40.0;
 }
+
+//to rotate shooter clockwise(to shoot 2nd copter)
 void rotate3()
 {
 	theta-=9.0;
 	if(theta>=0.0)
 		theta=0.0;
 }
+
 void bullet(void)
 {
 	glBegin(GL_POLYGON);
@@ -418,7 +466,7 @@ void display1()
 		shooter();
 	glPopMatrix();
 	
-	bx1+=8;by1+=10;
+	bx1+=8;by1+=10;				//for bullet translation
 	glPushMatrix();
 		glTranslatef(-bx1,by1,0);
 		bullet();
@@ -674,8 +722,9 @@ void display0(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0.5,0.2,0.0,0.0);
 	
-	screen1(-150,100,"Press 'v' to view simulation",1);
-	screen1(-185,0,"Press 'q' or double click on the screen to quit ",2);
+	screen1(-135,100,"Press 'v' to view simulation",1);
+	screen1(-185,10,"Press 'q' or double right click on the screen to quit ",2);
+	screen1(-215,-80,"Left click mouse to check and press 's' to continue",1);
 	glFlush();
 	glutSwapBuffers();
 
@@ -697,6 +746,7 @@ void display()
 	display1();
 	if(a1>=-130)
 	{
+		if(stop==0)
 		s1++;
 		if(s1>6)
 		bx1=0; by1=0;
@@ -705,6 +755,7 @@ void display()
 	
 	if(s1>7)
 	{
+		if(stop==0)
 		s2++;
 		display3();
 	}
@@ -712,12 +763,14 @@ void display()
 	if(s2>30)
 	{
 		bx2=0;by2=0;
+		if(stop==0)
 		s3++;
 		display4();
 	}
 	
 	if(s3>40)
 	{
+		if(stop==0)
 		s4++;
 		display5();
 		 a1=-450;
@@ -735,6 +788,7 @@ void display()
 	glFlush();
 	glutSwapBuffers();
 }
+
 void init()
 {
 	glClearColor(0.5,0.2,0.0,0.0);
@@ -753,7 +807,5 @@ void main(int argc, char** argv)
 	glutKeyboardFunc(keys);
 	init();
 	glutDisplayFunc(display);
-	//glutTimerFunc(100,update,0);
 	glutMainLoop();	
 }
-
