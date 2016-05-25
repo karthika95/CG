@@ -4,7 +4,6 @@
 #include<string.h>
 int raster[2],i;
 GLint sea[][2]={{-500,-300},{-500,-205},{500,-205},{500,-300}};
-GLfloat base[][2]={{130.0,-150.0},{180.0,-205.0},{480.0,-205.0},{480.0,-150.0}};
 GLint body1a[][2]={{235,-80},{235,-150},{280,-150},{280,-80}};
 GLint body1b[][2]={{280,-150},{460,-150},{460,-120},{280,-120}};
 GLint body1c[][2]={{390,-120},{460,-120},{460,-95},{390,-95}};
@@ -55,11 +54,18 @@ void update(int value)
 //destroyer
 void drawship()
 {
+	glColor3f(0.6,0.3,0.0);
 	glBegin(GL_POLYGON);
-		glColor3f(0.1,0.1,0.1);
-		for(i=0;i<4;i++)
-		glVertex2fv(base[i]);
+		glColor3f(0.9,0.9,0.9);
+		glVertex2f(130.0,-150.0);
+		glColor3f(0.7,0.4,0.0);
+		glVertex2f(180.0,-205.0);
+		glColor3f(0.05,0.05,0.0);
+		glVertex2f(480.0,-205.0);
+		glColor3f(0.7,0.4,0.0);
+		glVertex2f(480.0,-150.0);
 	glEnd();
+	
 	
 	glBegin(GL_POLYGON);
 		glColor3f(0.25,0.25,0.25);
@@ -237,12 +243,31 @@ void stars()
 		glColor3f(1.0,1.0,1.0);
 		glVertex2i(370,200);
 		glVertex2i(-450,205);
+		glVertex2i(-490,230);
+		glVertex2i(-470,280);
+		glVertex2i(-270,230);
+		glVertex2i(-230,280);
+		glVertex2i(-210,290);
+		glVertex2i(-350,235);
+		glVertex2i(-430,260);
+		glVertex2i(-400,285);
+		glVertex2i(-400,220);
 		glVertex2i(300,220);
 		glVertex2i(-380,250);
 		glVertex2i(-300,220);
 		glVertex2i(-320,250);
 		glVertex2i(-100,260);
 		glVertex2i(-20,270);
+		glVertex2i(5,280);
+		//glVertex2i(0,270);
+		glVertex2i(0,230);
+		glVertex2i(25,205);
+		glVertex2i(100,260);
+		glVertex2i(130,250);
+		glVertex2i(120,205);
+		glVertex2i(150,230);
+		glVertex2i(190,250);
+		glVertex2i(15,267);
 		glVertex2i(-190,270);
 		glVertex2i(200,280);
 		glVertex2i(50,260);
@@ -251,6 +276,10 @@ void stars()
 		glVertex2i(450,220);
 		glVertex2i(400,275);
 		glVertex2i(350,250);
+		glVertex2i(500,280);
+		glVertex2i(480,260);
+		glVertex2i(430,240);
+		
 	glEnd();
 }
 
@@ -549,11 +578,11 @@ void display3()
 	
 	if(s2>7 && s2<22)
 	{
-	bx2+=22;by2+=2;
-	glPushMatrix();
-	glTranslatef(-bx2,-by2,0);
-	bullet();
-	glPopMatrix();
+		bx2+=22;by2+=2;
+		glPushMatrix();
+		glTranslatef(-bx2,-by2,0);
+		bullet();
+		glPopMatrix();
 	}
 		
 	drawsea();
@@ -613,11 +642,11 @@ void display4()
 	
 	if(s3<35)
 	{
-	bx3+=10;by3+=10;
-	glPushMatrix();
-	glTranslatef(-bx3,by3,0);
-	bullet();
-	glPopMatrix();
+		bx3+=10;by3+=10;
+		glPushMatrix();
+		glTranslatef(-bx3,by3,0);
+		bullet();
+		glPopMatrix();
 	}
 	
 	if(s3>36)
@@ -633,10 +662,10 @@ void display4()
 	
 	if(a2>=-130)
 	{
-	glPushMatrix();
-		glTranslatef(-20.0,-30,0.0);
-		blast();
-	glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-20.0,-30,0.0);
+			blast();
+		glPopMatrix();
 	}
 	
 	glPushMatrix();
@@ -741,49 +770,50 @@ void display()
 		display0();
 	}
 	else
-	{v=1;
-	stars();
-	display1();
-	if(a1>=-130)
-	{
-		if(stop==0)
-		s1++;
-		if(s1>6)
-		bx1=0; by1=0;
-		display2();
-	}
+	{	
+		v=1;
+		stars();
+		display1();
+		if(a1>=-130)
+		{
+			if(stop==0)
+			s1++;
+			if(s1>6)
+			bx1=0; by1=0;
+			display2();
+		}
 	
-	if(s1>7)
-	{
-		if(stop==0)
-		s2++;
-		display3();
-	}
+		if(s1>7)
+		{
+			if(stop==0)
+			s2++;
+			display3();
+		}
 	
-	if(s2>30)
-	{
-		bx2=0;by2=0;
-		if(stop==0)
-		s3++;
-		display4();
-	}
+		if(s2>30)
+		{
+			bx2=0;by2=0;
+			if(stop==0)
+			s3++;
+			display4();
+		}
 	
-	if(s3>40)
-	{
-		if(stop==0)
-		s4++;
-		display5();
-		 a1=-450;
-	}
+		if(s3>40)
+		{
+			if(stop==0)
+			s4++;
+			display5();
+			 a1=-450;
+		}
 		
-	if(s4>40)
-	{
-		bx3=0;by3=0;
-		bx1=0;by1=0;
-		s1=0; s2=0; s3=0; s4=0; a2=-1150; b=-650; b2=-1700;
-		theta=0.0;
-		display();
-	}
+		if(s4>40)
+		{
+			bx3=0;by3=0;
+			bx1=0;by1=0;
+			s1=0; s2=0; s3=0; s4=0; a2=-1150; b=-650; b2=-1700;
+			theta=0.0;
+			display();
+		}
 	}
 	glFlush();
 	glutSwapBuffers();
